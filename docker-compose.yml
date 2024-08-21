@@ -1,28 +1,34 @@
 version: '3'
 services:
   db:
-    image: mongo
-    container_name: mongodb
+    image: mongo:4.2
+    container_name: mongo_db
     ports:
       - "27017:27017"
     volumes:
-      - mongo-data:/data/db
+      - mongo_data:/data/db
 
   web:
     image: node:6.9.1
+    container_name: node_web
     working_dir: /work
     volumes:
       - .:/work
     ports:
       - "3000:3000"
-    command: "npm start"
+    command: npm start
+    depends_on:
+      - db
 
   test:
-    image: postman/newman
-    working_dir: /work
+    image: postman/newman:alpine
+    container_name: newman_test
     volumes:
-      - .:/work
-    command: "newman run your_postman_collection.json"
+      - .:/etc/newman
+    command: run /etc/newman/postman_collection.json
+    depends_on:
+      - web
 
 volumes:
-  mongo-data:
+  mongo_data:
+
