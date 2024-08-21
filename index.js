@@ -1,19 +1,23 @@
 const express = require('express');
-const MongoClient = require('mongodb').MongoClient;
-
+const mongoose = require('mongoose');
 const app = express();
 const port = 3000;
 
-MongoClient.connect('mongodb://db:27017', (err, client) => {
-  if (err) throw err;
+// Connect to MongoDB
+mongoose.connect('mongodb://mongo_db:27017/mydatabase', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => {
+    console.log('Connected to MongoDB');
+}).catch(err => {
+    console.error('MongoDB connection error:', err);
+});
 
-  const db = client.db('testdb');
+// Simple ReST endpoint
+app.get('/', (req, res) => {
+    res.send('Hello, World!');
+});
 
-  app.get('/', (req, res) => {
-    res.send('Hello from Node.js and MongoDB!');
-  });
-
-  app.listen(port, () => {
-    console.log(`App listening at http://localhost:${port}`);
-  });
+app.listen(port, () => {
+    console.log(`Server running at http://127.0.0.1:${port}`);
 });
