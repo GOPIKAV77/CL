@@ -1,23 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
+
 const app = express();
 const port = 3000;
 
-// Connect to MongoDB
-mongoose.connect('mongodb://mongo_db:27017/mydatabase', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
-    console.log('Connected to MongoDB');
-}).catch(err => {
-    console.error('MongoDB connection error:', err);
-});
+mongoose.connect('mongodb://mongo:27017/test', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Could not connect to MongoDB', err));
 
-// Simple ReST endpoint
 app.get('/', (req, res) => {
-    res.send('Hello, World!');
+  res.send('Hello, world!');
 });
 
 app.listen(port, () => {
-    console.log(`Server running at http://127.0.0.1:${port}`);
+  console.log(`REST API listening at http://localhost:${port}`);
 });
+
+
